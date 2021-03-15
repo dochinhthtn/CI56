@@ -17,6 +17,27 @@ export default class RegisterForm extends HTMLElement {
         super();
         this.attachShadow({ mode: 'open' });
         this.shadowRoot.appendChild($template.content.cloneNode(true));
+
+        this.$registerForm = this.shadowRoot.getElementById('register-form');
+        this.$name = this.shadowRoot.getElementById('name');
+        this.$email = this.shadowRoot.getElementById('email');
+        this.$password = this.shadowRoot.getElementById('password');
+        this.$passwordConfirmation = this.shadowRoot.getElementById('password-confirmation');
+    }
+
+    connectedCallback() {
+        this.$registerForm.onsubmit = (event) => {
+            event.preventDefault();
+
+            function require(value) {
+                return value != '';
+            }
+
+            this.$name.validate(require, "Input your name");
+            this.$email.validate(require, "Input your email");
+            this.$password.validate(require, "Input your password");
+            this.$passwordConfirmation.validate(require, "Input your password confirmation");
+        }
     }
 }
 

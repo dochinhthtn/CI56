@@ -48,6 +48,17 @@ export default class InputWrapper extends HTMLElement {
     set error(message) {
         this.setAttribute('error', message);
     }
+
+    // condition: callback
+    validate(condition, message) {
+        if(condition(this.value)) { // require(this.value) -> require("Nga") -> true
+            this.error = "";
+            return true;
+        } else {
+            this.error = message;
+            return false;
+        }
+    }
 }
 
 window.customElements.define('input-wrapper', InputWrapper);
