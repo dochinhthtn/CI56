@@ -41,6 +41,13 @@ export default class InputWrapper extends HTMLElement {
         }
     }
 
+    get value() {
+        return this.$input.value;
+    }
+
+    set error(message) {
+        this.setAttribute('error', message);
+    }
 }
 
 window.customElements.define('input-wrapper', InputWrapper);
