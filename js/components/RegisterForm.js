@@ -1,3 +1,5 @@
+import { register } from "../models/user.js";
+
 const $template = document.createElement('template');
 $template.innerHTML = /*html*/ `
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -51,14 +53,14 @@ export default class RegisterForm extends HTMLElement {
                     this.$email.validate(require, "Input your email") &&
                     this.$email.validate(validateEmail, "Wrong email format")
                 ) &
-                this.$password.validate(require, "Input your password") & 
+                this.$password.validate(require, "Input your password") &
                 (
                     this.$passwordConfirmation.validate(require, "Input your password confirmation") &&
                     this.$passwordConfirmation.validate(confirmPassword, "Password confirmation is not match")
                 );
 
-            if(isPassed) {
-                console.log("Register successfully");
+            if (isPassed) {
+                register(name, email, password);
             }
 
         }
