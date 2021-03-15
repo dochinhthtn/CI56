@@ -29,14 +29,38 @@ export default class RegisterForm extends HTMLElement {
         this.$registerForm.onsubmit = (event) => {
             event.preventDefault();
 
+            let name = this.$name.value;
+            let email = this.$email.value;
+            let password = this.$password.value;
+
             function require(value) {
                 return value != '';
             }
 
-            this.$name.validate(require, "Input your name");
-            this.$email.validate(require, "Input your email");
-            this.$password.validate(require, "Input your password");
-            this.$passwordConfirmation.validate(require, "Input your password confirmation");
+            function confirmPassword(value) {
+                return value == password;
+            }
+
+            function validateEmail(email) {
+                const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                return re.test(String(email).toLowerCase());
+            }
+
+            let isPassed = this.$name.validate(require, "Input your name") &
+                (
+                    this.$email.validate(require, "Input your email") &&
+                    this.$email.validate(validateEmail, "Wrong email format")
+                ) &
+                this.$password.validate(require, "Input your password") & 
+                (
+                    this.$passwordConfirmation.validate(require, "Input your password confirmation") &&
+                    this.$passwordConfirmation.validate(confirmPassword, "Password confirmation is not match")
+                );
+
+            if(isPassed) {
+                console.log("Register successfully");
+            }
+
         }
     }
 }

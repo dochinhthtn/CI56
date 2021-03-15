@@ -51,7 +51,7 @@ export default class InputWrapper extends HTMLElement {
 
     // condition: callback
     validate(condition, message) {
-        if(condition(this.value)) { // require(this.value) -> require("Nga") -> true
+        if(condition(this.value)) { 
             this.error = "";
             return true;
         } else {
