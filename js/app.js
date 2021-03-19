@@ -3,6 +3,9 @@ import LoginForm from "./components/LoginForm.js";
 import RegisterForm from "./components/RegisterForm.js";
 
 import AuthScreen from "./screens/AuthScreen.js";
+import IndexScreen from "./screens/IndexScreen.js";
+
+import "./router.js";
 
 // let value = "Hack não";
 

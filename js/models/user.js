@@ -33,7 +33,7 @@ export async function login(email, password) {
     if(response.empty) {
         alert("Email or password is not correct");
     } else {
-        alert("Login successfully!");
+        router.navigate('/index');
     }
 }
 
