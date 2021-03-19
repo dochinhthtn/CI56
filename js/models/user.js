@@ -22,8 +22,19 @@ export async function register(name, email, password) {
     }
 }
 
-export function login() {
+export async function login(email, password) {
+    let response = await firebase
+        .firestore()
+        .collection("users")
+        .where("email", "==", email)
+        .where("password", "==", md5(password))
+        .get();
 
+    if(response.empty) {
+        alert("Email or password is not correct");
+    } else {
+        alert("Login successfully!");
+    }
 }
 
 export function getUserInfo() {
