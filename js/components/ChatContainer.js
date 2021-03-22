@@ -1,0 +1,17 @@
+const $template = document.createElement('template');
+$template.innerHTML = /*html*/ `
+    <div id="chat-container">
+        <message-list style="height: calc(100vh - 50px); display: block; overflow-y: scroll;"></message-list>
+        <send-message-form class="fixed-bottom pb-2"></send-message-form>
+    </div>
+`;
+
+export default class ChatContainer extends HTMLElement {
+    constructor() {
+        super();
+        this.attachShadow({ mode: "open" });
+        this.shadowRoot.appendChild($template.content.cloneNode(true));
+    }
+}
+
+window.customElements.define('chat-container', ChatContainer);
