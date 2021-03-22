@@ -22,7 +22,7 @@ router.on('/index', function () {
 }).resolve();
 
 router.on(function() {
-    router.navigate('/auth');
+    // router.navigate('/auth');
 }).resolve();
 
 window.router = router;

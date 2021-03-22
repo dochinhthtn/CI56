@@ -47,7 +47,16 @@
 </head>
 
 <body>
-    <div id="app"></div>
+    <div id="app">
+        <div>
+            <message-list messages='[
+                {"content": "alo alo", "owned": false},
+                {"content": "gọi gì đấy", "owned": true},
+                {"content": "đi chơi không?", "owned": false}
+            ]'></message-list>
+            <send-message-form class="fixed-bottom pb-2"></send-message-form>
+        </div>
+    </div>
 
     <script src="./js/app.js" type="module"></script>
 </body>
