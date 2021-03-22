@@ -1,4 +1,4 @@
-import { md5 } from "../utils.js";
+import { getDataFromDocs, md5 } from "../utils.js";
 
 export async function register(name, email, password) {
     let response = await firebase
@@ -13,7 +13,8 @@ export async function register(name, email, password) {
         await firebase.firestore().collection("users").add({
             name: name,
             email: email,
-            password: md5(password)
+            password: md5(password),
+            status: 'free'
         });
 
         alert("Register successfully");
@@ -40,6 +41,14 @@ export async function login(email, password) {
 export function getUserInfo() {
 
 }
+
+export function listenUsersStatusChanged(callback) {
+    firebase.firestore().collection('users').onSnapshot(function(snapshot) {
+        let data = getDataFromDocs(snapshot.docs);
+        callback(data);
+    });
+}
+
 
 // xử lý bất đồng bộ: callback, promise, async/await
 // phương châm: chỗ nào có promise -> có await -> có async
