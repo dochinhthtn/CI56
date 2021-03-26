@@ -1,18 +1,20 @@
+import { getUserByToken, updateUser } from "../models/user.js";
+
 const $template = document.createElement('template');
 $template.innerHTML = /*html*/ `
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <div id="user-actions">
         <div id="status-free" class="m-2">
-            <button class="btn btn-block btn-primary">Flirt</button>
-            <button class="btn btn-block btn-info">Bite</button>
+            <button id="flirt-btn" class="btn btn-block btn-primary">Flirt</button>
+            <button id="bite-btn" class="btn btn-block btn-info">Bite</button>
         </div>
 
         <div id="status-flirting" class="m-2">
-            <button class="btn btn-block btn-secondary">Stop flirting</button>
+            <button id="stop-flirting-btn" class="btn btn-block btn-secondary">Stop flirting</button>
         </div>
 
         <div id="status-chatting" class="m-2">
-            <button class="btn btn-block btn-danger">End Conversation</button>
+            <button id="end-conversation-btn" class="btn btn-block btn-danger">End Conversation</button>
         </div>
     </div>
 `;
@@ -26,6 +28,19 @@ export default class UserActions extends HTMLElement {
         this.$free = this.shadowRoot.getElementById('status-free');
         this.$flirting = this.shadowRoot.getElementById('status-flirting');
         this.$chatting = this.shadowRoot.getElementById('status-chatting');
+
+        this.$flirtBtn = this.shadowRoot.getElementById('flirt-btn');
+        this.$biteBtn = this.shadowRoot.getElementById('bite-btn');
+        this.$stopFlirtingBtn = this.shadowRoot.getElementById('stop-flirting-btn');
+        this.$endConversationBtn = this.shadowRoot.getElementById('end-conversation-btn');
+    }
+
+    connectedCallback() {
+        this.$flirtBtn.onclick = async () => {
+            let token = localStorage.getItem('token');
+            let currentUser = await getUserByToken(token);
+            await updateUser(currentUser.id, { status: 'flirting' });
+        }
     }
 
     static get observedAttributes() {
@@ -33,21 +48,21 @@ export default class UserActions extends HTMLElement {
     }
 
     attributeChangedCallback(attrName, oldValue, newValue) {
-        if(attrName == 'status') {
+        if (attrName == 'status') {
 
-            if(newValue == 'free') {
+            if (newValue == 'free') {
                 this.$free.style.display = 'block';
                 this.$flirting.style.display = 'none';
                 this.$chatting.style.display = 'none';
-            } else if(newValue == 'flirting') {
+            } else if (newValue == 'flirting') {
                 this.$free.style.display = 'none';
                 this.$flirting.style.display = 'block';
                 this.$chatting.style.display = 'none';
-            } else if(newValue == 'chatting') {
+            } else if (newValue == 'chatting') {
                 this.$free.style.display = 'none';
                 this.$flirting.style.display = 'none';
                 this.$chatting.style.display = 'block';
-            }            
+            }
         }
     }
 }

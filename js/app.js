@@ -12,33 +12,6 @@ import AuthScreen from "./screens/AuthScreen.js";
 import IndexScreen from "./screens/IndexScreen.js";
 
 import "./router.js";
+import { getUserByToken } from "./models/user.js";
 
-// let value = "Hack não";
-
-// function validate(condition, message) {
-//     // condition = require: function
-//     // message = Lỗi to
-
-//     if (condition(value)) {
-//         console.log('Không có lỗi');;
-//         return true;
-//     } else {
-//         console.log(message);
-//         return false;
-//     }
-// }
-
-// function required(value) {
-//     return value != '';
-// }
-
-
-// required("Hack não");
-// console.log(required(value));
-
-// validate(required('aaa'), "Lỗi to");
-// -> validate(true, "Lỗi to");
-
-// validate(required, "Lỗi to 😥😥");
-
-// validate(true, "Lỗi to");
+getUserByToken('this is my token');

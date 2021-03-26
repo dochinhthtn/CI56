@@ -1,4 +1,4 @@
-import { getDataFromDocs, md5 } from "../utils.js";
+import { getDataFromDocs, md5, getDataFromDoc } from "../utils.js";
 
 export async function register(name, email, password) {
     let response = await firebase
@@ -31,11 +31,35 @@ export async function login(email, password) {
         .where("password", "==", md5(password))
         .get();
 
-    if(response.empty) {
+    if (response.empty) {
         alert("Email or password is not correct");
     } else {
+        let userId = response.docs[0].id;
+        let token = generateToken(userId);
+
+        localStorage.setItem("token", token);
+        await updateUser(userId, { token: token });
+
         router.navigate('/index');
     }
+}
+
+export async function updateUser(id, data) {
+    await firebase.firestore().collection('users').doc(id).update(data);
+}
+
+export async function getUserByToken(token) {
+    let response = await firebase
+        .firestore()
+        .collection('users')
+        .where('token', '==', token)
+        .get();
+
+    return getDataFromDoc(response.docs[0]);
+}
+
+export function generateToken(id) {
+    return md5(Date.now() + id);
 }
 
 export function getUserInfo() {
@@ -43,7 +67,7 @@ export function getUserInfo() {
 }
 
 export function listenUsersStatusChanged(callback) {
-    firebase.firestore().collection('users').onSnapshot(function(snapshot) {
+    firebase.firestore().collection('users').onSnapshot(function (snapshot) {
         let data = getDataFromDocs(snapshot.docs);
         callback(data);
     });
