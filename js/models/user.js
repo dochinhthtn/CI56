@@ -62,8 +62,18 @@ export function generateToken(id) {
     return md5(Date.now() + id);
 }
 
-export function getUserInfo() {
+export async function listenCurrentUser(callback) {
+    let currentUser = await getCurrentUser();
+    firebase.firestore().collection('users').doc(currentUser.id).onSnapshot(function (snapshot) {
+        let user = getDataFromDoc(snapshot);
+        callback(user);
+    });
+}
 
+export async function getCurrentUser() {
+    let token = localStorage.getItem('token');
+    let currentUser = await getUserByToken(token);
+    return currentUser;
 }
 
 export function listenUsersStatusChanged(callback) {
