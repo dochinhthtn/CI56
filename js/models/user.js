@@ -55,6 +55,10 @@ export async function getUserByToken(token) {
         .where('token', '==', token)
         .get();
 
+    if(response.empty) {
+        throw new Error("User's not exist");
+    }
+
     return getDataFromDoc(response.docs[0]);
 }
 
