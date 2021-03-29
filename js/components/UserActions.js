@@ -1,4 +1,4 @@
-import { getCurrentUser, getUserByToken, updateUser } from "../models/user.js";
+import { getCurrentUser, getFlirtingUsers, getUserByToken, updateUser } from "../models/user.js";
 
 const $template = document.createElement('template');
 $template.innerHTML = /*html*/ `
@@ -44,6 +44,30 @@ export default class UserActions extends HTMLElement {
 
         this.$stopFlirtingBtn.onclick = async () => {
             await updateUser(currentUser.id, { status: 'free' });
+        }
+
+        this.$biteBtn.onclick = async () => {
+            // lấy ra tất cả người dùng đang flirting
+            let flirtingUsers = await getFlirtingUsers();
+
+            // check số lượng người dùng flirting
+            if (flirtingUsers.length == 0) {
+                alert("No flirting users 😑😑😑");
+                return;
+            }
+            // nếu số lượng người dùng flirting > 0
+            // chọn ngẫu nhiên 1 người để ghép 
+            // ngẫu nhiên số nguyên 0 -> flirtingUsers.length
+            let randomIndex = Math.floor(Math.random() * flirtingUsers.length);
+            let randomUser = flirtingUsers[randomIndex];
+
+            // thay đổi trạng thái của 2 người dùng
+            await updateUser(currentUser.id, { status: 'chatting' });
+            await updateUser(randomUser.id, { status: 'chatting' });
+        }
+
+        this.$endConversationBtn.onclick = async () => {
+
         }
     }
 

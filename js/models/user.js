@@ -55,7 +55,7 @@ export async function getUserByToken(token) {
         .where('token', '==', token)
         .get();
 
-    if(response.empty) {
+    if (response.empty) {
         throw new Error("User's not exist");
     }
 
@@ -85,6 +85,16 @@ export function listenUsersStatusChanged(callback) {
         let data = getDataFromDocs(snapshot.docs);
         callback(data);
     });
+}
+
+export async function getFlirtingUsers() {
+    let response = await firebase
+        .firestore()
+        .collection('users')
+        .where('status', '==', 'flirting')
+        .get();
+
+    return getDataFromDocs(response.docs);
 }
 
 
