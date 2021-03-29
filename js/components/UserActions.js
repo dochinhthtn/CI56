@@ -1,4 +1,4 @@
-import { getUserByToken, updateUser } from "../models/user.js";
+import { getCurrentUser, getUserByToken, updateUser } from "../models/user.js";
 
 const $template = document.createElement('template');
 $template.innerHTML = /*html*/ `
@@ -35,11 +35,15 @@ export default class UserActions extends HTMLElement {
         this.$endConversationBtn = this.shadowRoot.getElementById('end-conversation-btn');
     }
 
-    connectedCallback() {
+    async connectedCallback() {
+        let currentUser = await getCurrentUser();
+
         this.$flirtBtn.onclick = async () => {
-            let token = localStorage.getItem('token');
-            let currentUser = await getUserByToken(token);
             await updateUser(currentUser.id, { status: 'flirting' });
+        }
+
+        this.$stopFlirtingBtn.onclick = async () => {
+            await updateUser(currentUser.id, { status: 'free' });
         }
     }
 
