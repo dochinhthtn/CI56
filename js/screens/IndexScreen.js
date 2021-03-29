@@ -1,4 +1,4 @@
-import { listenCurrentUser } from "../models/user.js";
+import { getCurrentUser, listenCurrentUser } from "../models/user.js";
 
 const $template = document.createElement('template');
 $template.innerHTML = /*html*/ `
@@ -15,6 +15,9 @@ $template.innerHTML = /*html*/ `
 `;
 
 export default class IndexScreen extends HTMLElement {
+
+    currentUser = null;
+
     constructor() {
         super();
         this.attachShadow({ mode: 'open' });
@@ -23,7 +26,13 @@ export default class IndexScreen extends HTMLElement {
         this.$userActions = this.shadowRoot.getElementById('user-actions');
     }
 
-    connectedCallback() {
+    async connectedCallback() {
+        try {
+            this.currentUser = await getCurrentUser();
+        } catch (error) {
+            router.navigate('/auth');
+        }
+
         listenCurrentUser((user) => {
             this.$userActions.setAttribute('status', user.status);
         });
