@@ -1,3 +1,4 @@
+import { createConversation, getConversationUsers } from "../models/conversation.js";
 import { getCurrentUser, getFlirtingUsers, getUserByToken, updateUser } from "../models/user.js";
 
 const $template = document.createElement('template');
@@ -61,13 +62,21 @@ export default class UserActions extends HTMLElement {
             let randomIndex = Math.floor(Math.random() * flirtingUsers.length);
             let randomUser = flirtingUsers[randomIndex];
 
-            // thay đổi trạng thái của 2 người dùng
-            await updateUser(currentUser.id, { status: 'chatting' });
-            await updateUser(randomUser.id, { status: 'chatting' });
+            // tạo 1 conversation và thay đổi trạng thái của 2 người dùng
+            let newConversation = await createConversation();
+
+            await updateUser(currentUser.id, { status: 'chatting', currentConversation: newConversation.id });
+            await updateUser(randomUser.id, { status: 'chatting', currentConversation: newConversation.id });
         }
 
         this.$endConversationBtn.onclick = async () => {
+            let currentUser = await getCurrentUser();
 
+            let conversationId = currentUser.currentConversation;
+            let users = await getConversationUsers(conversationId);
+            for (let user of users) {
+                await updateUser(user.id, { status: 'free', currentConversation: null });
+            }
         }
     }
 

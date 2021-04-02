@@ -10,7 +10,7 @@ $template.innerHTML = /*html*/ `
             <user-actions id="user-actions" status="free"></user-actions>
         </div>
 
-        <chat-container class="w-75"></chat-container>
+        <chat-container id="chat-container" class="w-75"></chat-container>
     </div>
 `;
 
@@ -24,6 +24,7 @@ export default class IndexScreen extends HTMLElement {
         this.shadowRoot.appendChild($template.content.cloneNode(true));
 
         this.$userActions = this.shadowRoot.getElementById('user-actions');
+        this.$chatContainer = this.shadowRoot.getElementById('chat-container');
     }
 
     async connectedCallback() {
@@ -35,6 +36,9 @@ export default class IndexScreen extends HTMLElement {
 
         listenCurrentUser((user) => {
             this.$userActions.setAttribute('status', user.status);
+            if(user.status == 'chatting') {
+                this.$chatContainer.setAttribute('conversation-id', user.currentConversation);
+            }
         });
     }
 }

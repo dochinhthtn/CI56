@@ -22,6 +22,8 @@ export default class MessageList extends HTMLElement {
         // newValue: string (json)
         if(attrName == 'messages') {
             let messages = JSON.parse(newValue);
+            this.$list.innerHTML = '';
+            
             for(let message of messages) {
                 // tạo và gán thuộc tính cho message-container -> <message-container content=""></message-container>
                 let $messageContainer = document.createElement('message-container');
